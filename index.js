@@ -58,7 +58,7 @@ async function run() {
         app.put('/coffee/:id', async(req,res)=>{
             const id = req.params.id;
             const filter = {_id: new ObjectId(id)}
-            const option ={upsert:true} //thakle tumi update korba thakle notun akta create kore felba ar kaj ata
+            const option ={upsert:true} //thakle tumi update korba na thakle notun akta create kore felba ar kaj ata
             const updatedCoffee = req.body;
             const coffee = {
                 $set: {
@@ -96,6 +96,19 @@ async function run() {
             const newUser = req.body;
             console.log('creating new user', newUser);
             const result = await userCollection.insertOne(newUser);
+            res.send(result)
+        })
+
+        app.patch('/users', async(req, res) =>{
+            const email = req.body.email;
+            const filter = {email}
+            const updateDoc = {
+                $set: {
+                    lastSignInTime:req.body?.lastSignInTime
+                }
+            }
+
+            const result = await userCollection.updateOne(filter,updateDoc);
             res.send(result)
         })
 
